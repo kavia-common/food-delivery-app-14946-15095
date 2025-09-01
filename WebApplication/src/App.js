@@ -1,47 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import HotelDetail from './pages/HotelDetail';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Orders from './pages/Orders';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
+import { AuthContext, AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+
+// Route that requires authentication
+function RequireAuth({ children }) {
+  const { user } = React.useContext(AuthContext);
+  const location = useLocation();
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+  return children;
+}
 
 // PUBLIC_INTERFACE
 function App() {
   const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
   return (
     <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <header className="App-header" style={{ minHeight: 'auto' }}>
+              <button
+                className="theme-toggle"
+                onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+                aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+              </button>
+              <Navbar />
+            </header>
+            <main style={{ paddingBottom: 40 }}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/hotels/:id" element={<HotelDetail />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route
+                  path="/checkout"
+                  element={
+                    <RequireAuth>
+                      <Checkout />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <RequireAuth>
+                      <Orders />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/orders/:orderId"
+                  element={
+                    <RequireAuth>
+                      <Orders />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+          </BrowserRouter>
+        </CartProvider>
+      </AuthProvider>
     </div>
   );
 }

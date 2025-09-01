@@ -1,82 +1,35 @@
 # Lightweight React Template for KAVIA
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This project provides a minimal React template extended with routing, authentication, an API client, and basic pages to demonstrate an end-to-end flow connecting to an API Gateway.
 
-## Features
+## Quick Start
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+1) Copy .env.example to .env and set these variables:
+- REACT_APP_SITE_URL=http://localhost:3000
+- REACT_APP_API_GATEWAY_URL=http://localhost:8080
+- REACT_APP_WS_URL=ws://localhost:8080/ws/notifications
 
-## Getting Started
+2) Install dependencies
+- npm install
 
-In the project directory, you can run:
+3) Start the app
+- npm start
 
-### `npm start`
+## Implemented Features
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Routing with react-router-dom (Home, Hotel Detail, Cart, Checkout, Orders, Login, Register)
+- Axios API client reading base URL from env and forwarding the Authorization header
+- Auth context for login/register/logout and profile fetching (/auth/login, /auth/register, /auth/me)
+- Simple Cart context with add/remove/clear and total calculation
+- WebSocket hook for real-time notifications (REACT_APP_WS_URL)
+- Minimal functional UI components (Navbar, cards, forms)
 
-### `npm test`
+## Notes
 
-Launches the test runner in interactive watch mode.
+- Backend API routes expected by this frontend:
+  - GET /hotels, GET /hotels/:id, GET /hotels/:id/menu
+  - POST /orders, GET /orders (and optionally GET /orders/:id)
+  - POST /auth/login, POST /auth/register, GET /auth/me
+- Adjust the routes to match your Gateway if they differ.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For more on React, check out the [React documentation](https://reactjs.org/).
